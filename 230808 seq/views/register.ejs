@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <form name="register-form">
+        <fieldset>
+            <legend>회원가입</legend>
+            <input type="text" id="registerUserName" placeholder="사용자 이름"/><br/>
+            <input type="text" id="registerUserId" placeholder="사용자 아이디"><br/>
+            <input type="password" id="registerUserPw" placeholder="비밀번호"/><br/>
+            <button type="button" onclick="userRegister()">회원가입</button>
+        </fieldset>
+    </form>
+    <br/>
+</body>
+<script>
+    function userRegister(){
+        console.log("user register");
+        const form = document.forms["register-form"];
+        axios({
+            method:"POST",
+            url:"/user/register",
+            data:{
+                name:form.registerUserName.value,
+                userid:form.registerUserId.value,
+                pw:form.registerUserPw.value
+            }
+            }).then(res=>{
+                console.log("res",res);
+                if(!res.data.result){
+                    alert('id가 중복되어 사용할 수 없습니다 다른 id로 입력해주세요')
+                    return;
+                }
+                alert(`${res.data.userid}님 회원가입 하신걸 환영합니다`)
+                window.location.assign("/user/login");
+            }
+        )
+    }
+</script>
+</html>

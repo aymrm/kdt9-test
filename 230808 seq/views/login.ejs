@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <form name="login-form">
+        <fieldset>
+            <legend>로그인</legend>
+            <input type="text" id="loginUserId" placeholder="사용자 아이디"><br/>
+            <input type="password" id="loginUserPw" placeholder="비밀번호"/><br/>
+            <button type="button" onclick="userLogin()">로그인</button>
+        </fieldset>
+    </form>
+    <br/>
+
+    <form action="/user/profile" method="post" name="profile-form">
+        <input type="hidden" name="userid"/>
+    </form>
+
+    <script>
+        function userLogin(){
+            const form = document.forms["login-form"];
+            axios({
+                method:"POST",
+                url:"/user/login",
+                data:{
+                    userid:form.loginUserId.value,
+                    pw:form.loginUserPw.value
+                },
+            }).then(res=>{
+                console.log("res",res.data);
+                if(!res.data.result){
+                    alert(`로그인에 실패했습니다 다시 입력해주세요`);
+                    return;
+                }
+                alert(`${res.data.userid}님 로그인 하신걸 환영합니다`);
+                const profileForm = document.forms["profile-form"];
+                profileForm.userid.value=form.loginUserId.value;
+                console.log(profileForm.userid);
+                profileForm.submit();
+            });
+        }
+        // function editVisitor(id){
+        //     const form = document.forms['visitor-form'];
+        //     axios({
+        //         method:"patch",
+        //         url:"/visitor/edit",
+        //         data:{
+        //             id:Number(id),
+        //             name:form.name.value,
+        //             comment:form.comment.value
+        //         }
+        //     }).then((res)=>{
+        //         console.log("res",res);
+        //         if(res.data.result){
+        //             window.location.reload();
+        //         }
+        //     })
+        // }
+        // function deleteVisitor(id){
+        //     if (!confirm('삭제하시겠습니까?')){
+        //         return;
+        //     }
+        //     axios({
+        //         method:"DELETE",
+        //         url:'/visitor/delete',
+        //         data:{
+        //             id:Number(id)
+        //         }
+        //     }).then((res)=>{
+        //         if(res.data.result){
+        //             window.location.reload();
+        //         }
+        //     })
+        // }
+    </script>
+</body>
+</html>
